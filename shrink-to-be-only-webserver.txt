@@ -1,0 +1,80 @@
+
+[ ] 22:07 2025-12-25
+
+	> 我想要把這個實驗簡化成直接用 Local computer 的 Chrome browser，所以就不需要背負 
+	  chromium 那麼大的 size. 也就是說: 這個 APP 本身只是一個 web server 
+	  他跑起來以後只給 user 一個 message 請他們去 visit a local 網址。這麼一來 Chrome 
+	  的功能又更強, setup.exe 的 size 就不需要那麼大, 不需要把整個 chromium 
+	  都包進去。而且直接用 Chrome browser 的好處是 User本身的習慣可以不用改變, 本身的 
+	  Chrome plugin and extensions 都可以用。你不要動，你先告訴我你的想法。
+	--
+	✦ 好的，我完全理解您的想法，而且我認為這是一個非常好的方向。
+
+	您的分析完全正確。將應用程式從一個完整的 Electron 應用程式（包含內嵌的 Chromium 
+	瀏覽器）轉變為一個輕量級的背景網頁伺服器 (web server)，有以下幾個顯著的優點：
+
+	   1. 大幅縮減應用程式大小 (Reduce Application Size)：這是最大的好處。少了龐大的 Chromium，
+		  您的安裝檔 (setup.exe) 可能會從超過 100MB 縮小到幾 MB。
+	   2. 利用使用者熟悉的環境 (Leverage User's Environment)：使用者可以在他們自己習慣且
+		  設定好的 Chrome 瀏覽器中操作，包括他們已安裝的擴充功能 (extensions)、書籤、密碼管
+		  理等，體驗會更無縫。
+	   3. 永遠保持最新的瀏覽器功能 (Always-Up-to-Date Browser)：您不需要維護或更新應用程
+	      式內的 Chromium，使用者自己的 Chrome 會自動更新，自然享受到最新的網頁標準和安全性。
+	   4. 簡化開發 (Simplify Development)：您只需要專注於 web server 的後端邏輯和前端網
+	      頁的開發，而不需要處理太多 Electron 的視窗管理、生命週期等特定 API。
+
+	  我的想法是，我們可以將這個改造計畫分為幾個主要步驟：
+
+	  第一階段：轉型為 Web Server
+
+	   * 修改主程序 (`main.js`)：
+		   * 移除所有建立 BrowserWindow 的程式碼。我們不再需要 Electron 創建任何圖形介面視窗。
+		   * 引入一個輕量級的網頁伺服器框架，例如 Express.js。
+		   * 設定 Express 伺服器，讓它託管 (serve) 您現有的前端檔案（src/index.html, 
+			 src/index.css, src/renderer.js 等）。
+		   * 在應用程式啟動時，啟動這個 Express 伺服器，並監聽一個固定的通訊埠 (port)，
+		     例如 localhost:3000。
+
+	  第二階段：改善使用者體驗 (UX)
+
+	   * 啟動通知：當伺服器成功啟動後，我們有兩種方式通知使用者：
+		   1. 自動開啟瀏覽器：使用像 open 這樣的 npm 套件，在伺服器就緒後，自動在使用者的預設瀏覽器中開啟
+			  http://localhost:3000。這是最直接的方式。
+		   2. 系統通知：使用 Electron 的 Notification API
+			  顯示一個系統通知，告訴使用者「伺服器已啟動，請點擊這裡開啟」或「請在瀏覽器中訪問 http://localhost:3000」。
+
+	   * 建立系統托盤圖示 (System Tray Icon)：
+		   * 為了讓應用程式在沒有視窗的情況下也能被使用者控制，最好的方法是建立一個系統托盤圖
+		     示（在 Windows 右下角或 macOS 狀態列）。
+		   * 這個托盤圖示可以提供一個右鍵選單，包含「開啟儀表板 (Open Dashboard)」、「重新啟動 
+		     (Restart)」、「結束 (Quit)」等選項。這樣使用者就能方便地管理這個背景服務。
+
+	  第三階段：處理前後端通訊
+
+	   * 廢除 `preload.js` 的 IPC 機制：
+		   * 原本在 renderer.js 中透過 window.electron.ipcRenderer 與 main.js 通訊的
+		     方式將不再有效，因為網頁是在標準的 Chrome 中執行，沒有 Electron 的環境。
+		   * 我們需要將這種通訊方式改為標準的 Web API，例如：
+			   * REST API：Express 伺服器提供 API 端點 (endpoints)，例如 /api/get-data，
+			     前端使用 fetch 函式來請求資料。
+			   * WebSockets：如果需要雙向、即時的通訊，我們可以使用 socket.io 等函式庫。
+
+	  總結來說，我的想法是：我們將會把 Electron 的核心從一個桌面視窗應用，轉變成一個在背景運
+	  行的網頁伺服器，並透過系統托盤圖示來管理它。
+
+	  這個方向完全符合您的簡化目標，並且能帶來您提到的所有好處。
+
+	  如果這個方向您覺得正確，我就可以開始規劃具體的修改步驟和程式碼。	
+
+[ ] 22:38 2025-12-25 
+	用一個新的 branch 來開始, 你幫我想一個好名字 --> branch feat/external-browser-mode
+	--
+
+
+
+
+
+
+
+
+
