@@ -69,10 +69,15 @@ module.exports = {
           owner: 'hcchengithub', // 例如: 'my-github-id'
           name: 'my-app'         // project name 例如: 'my-electron-app'
         },
-        prerelease: true // 建議先設為 true (草稿/預發佈)，比較安全
+        prerelease: true, // 建議先設為 true (草稿/預發佈)，比較安全
+        octokitOptions: {
+          request: {
+            timeout: 120000  // 單位毫秒，建議先設 60 秒，可再提高到 120000（2 分鐘）
+          }
+        }
       }
     }
-  ]
+  ]  
   // 👆 publishers 結束
 };
 
