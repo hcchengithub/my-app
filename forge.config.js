@@ -53,7 +53,7 @@ module.exports = {
         prerelease: true, // 建議先設為 true (草稿/預發佈)，比較安全
         octokitOptions: {
           request: {
-            timeout: 120000  // 單位毫秒，建議先設 60 秒，可再提高到 120000（2 分鐘）
+            timeout: 420000  // 單位毫秒，建議先設 60 秒，可再提高到 120000（2 分鐘）
           }
         }
       }

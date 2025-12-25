@@ -2437,8 +2437,436 @@
 	  當您確認這兩點都準備好後，請告訴我，我會指導您執行 npm run publish。	
 	  --> 你又想幫我直行! 跟你講 npm 都由我來執行。 
 	  
-	
+[ ] 02:24 2025-12-26
 
+	✦ 您說得對，再次感謝您的提醒！我會時刻記住 npm 的指令都由您來執行，我只負責指導。
+
+	  關於 GitHub 儲存庫
+
+	   1. 「我們的 repo 不是全新的，你一定要全新的嗎？」
+		  您說得對，如果您的本地儲存庫 (my-app) 已經存在於 GitHub 上，那就不需要建立全新的儲存庫。我之前的意思是，npm run publish
+	  會嘗試發布到 forge.config.js 中 publishers.config.repository 所定義的 GitHub 儲存庫。
+
+		  根據您在 forge.config.js 中的設定：
+
+	   1     repository: {
+	   2       owner: 'hcchengithub', // 例如: 'my-github-id'
+	   3       name: 'my-app'         // project name 例如: 'my-electron-app'
+	   4     }
+		  它會嘗試發布到 https://github.com/hcchengithub/my-app 這個儲存庫。
+
+		  關鍵確認點是：
+		   * 您在 GitHub 上是否已經存在一個名為 my-app (或您實際設定的 name) 的儲存庫，且它的擁有者是 hcchengithub
+			 (或您實際設定的 owner)？
+		   * 您的本地儲存庫是否已經設定了指向該 GitHub 儲存庫的 origin 遠端？
+
+		  如果您之前已經成功 publish 過，那這兩點應該都已經滿足了。我現在理解您指的「先前已經成功過了」是指這層含義。
+
+	  關於 GitHub Token
+
+	   1. 「先前已經做成功過了, 這個 token 沒問題，我剛檢查了。」
+		  太好了，這確認了 GITHUB_TOKEN 環境變數已經正確設定，並且具有所需的權限。
+
+	  ---
+
+	  結論：
+
+	  既然 GitHub 儲存庫的狀態和 GITHUB_TOKEN 都已確認就緒，那麼您可以執行 npm run publish 了。
+
+	  請您在終端機中執行以下指令：
+
+	   1 npm run publish
+
+	  這個指令會將您剛剛 make 出來的安裝包上傳到 GitHub Releases。同樣，這可能需要一些時間。完成後，請您將輸出結果告知我。
+
+	> 我們是不是要先 commit？ 版本需不需要跳號？
+
+	✦ 您提出了兩個非常好的問題，這是在發布前非常重要的步驟。
+
+	  1. 我們是不是要先 commit？
+
+	  是的，強烈建議先 commit。
+
+	  我們剛剛進行了大量的清理和重建工作：
+	   * 刪除了所有 Webpack 相關的檔案和設定。
+	   * 清理並重構了 forge.config.js 和 src/main.js。
+	   * 修改了 package.json 以反映新的依賴關係。
+	   * 修改了 src/index.html 來正確引入 JS 和 CSS。
+
+	  這些都是重大的架構變更，應該被記錄在 Git 的歷史中。一個清晰的 commit 可以讓我們知道，在這個時間點，我們成功地將專案從
+	  webpack 模式轉換為了 None + Express 的模式。
+
+	  2. 版本需不需要跳號？
+
+	  是的，這是一個很好的實踐。
+
+	  既然我們對應用程式的架構做了如此大的變更，提升版本號是合理且必要的。這有助於區分這個新的、基於外部瀏覽器的版本和之前基於內
+	  嵌 Chromium 的版本。
+
+	  根據 語意化版本 (Semantic Versioning) (https://semver.org/lang/zh-TW/) 的原則：
+
+	   * MAJOR (主版號)：當您做了不相容的 API 變更。
+	   * MINOR (次版號)：當您以相容的方式新增功能。
+	   * PATCH (修補版號)：當您做了相容的 bug 修復。
+
+	  我們的變更非常巨大，可以視為一個重大的新功能或架構調整。我建議至少提升 次版號 (MINOR version)。
+
+	  目前的版本是 1.0.0。我們可以將它改為 1.1.0。
+
+	  總結一下我的建議：
+
+	   1. 修改 `package.json`: 將 version 從 1.0.0 改為 1.1.0。
+	   2. Commit 變更: 將所有變更 add 到暫存區，然後 commit。
+
+	  您同意這個流程嗎？如果同意，我將會：
+	   1. 修改 package.json 中的版本號。
+	   2. 指導您如何 add 和 commit 這些變更，並為您草擬一個 commit message。
+	╭───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+	│ ✓  Shell git status [current working directory C:\Users\8304018\Documents\GitHub\Electron\my-app] (檢查目前的 Git 狀態，… │
+	│                                                                                                                           │
+	│ On branch feat/external-browser-mode                                                                                      │
+	│ Your branch is up to date with 'origin/feat/external-browser-mode'.                                                       │
+	│                                                                                                                           │
+	│ Changes not staged for commit:                                                                                            │
+	│   (use "git add/rm <file>..." to update what will be committed)                                                           │
+	│   (use "git restore <file>..." to discard changes in working directory)                                                   │
+	│         modified:   forge.config.js                                                                                       │
+	│         modified:   package-lock.json                                                                                     │
+	│         modified:   package.json                                                                                          │
+	│         modified:   shrink-to-be-only-webserver.txt                                                                       │
+	│         modified:   src/index.html                                                                                        │
+	│         modified:   src/main.js                                                                                           │
+	│         deleted:    webpack.main.config.js                                                                                │
+	│         deleted:    webpack.renderer.config.js                                                                            │
+	│         deleted:    webpack.rules.js                                                                                      │
+	│                                                                                                                           │
+	│ no changes added to commit (use "git add" and/or "git commit -a")                                                         │
+	╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+	✦ 好的，我已經檢查了 Git 狀態，我們有大量的變更需要提交。
+
+	  現在，我將執行第一步：修改 `package.json` 中的版本號，將其從 1.0.0 更新為 1.1.0。
+
+	  ---
+	  說明: 將 package.json 中的 version 從 1.0.0 更新為 1.1.0，以反映專案架構的重大變更（從 Webpack 模式切換到 "None" + Express
+	  模式）。
+	  ---
+	╭───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+	│ ✓  Edit package.json:   "version": "1.0.0", =>   "version": "1.1.0",                                                      │
+	│                                                                                                                           │
+	│ 1   {                                                                                                                     │
+	│ 2     "name": "my-app",                                                                                                   │
+	│ 3     "productName": "my-app",                                                                                            │
+	│ 4 -   "version": "1.0.0",                                                                                                 │
+	│ 4 +   "version": "1.1.0",                                                                                                 │
+	│ 5     "description": "My Electron application description",                                                               │
+	│ 6     "main": "src/main.js",                                                                                              │
+	│ 7     "scripts": {                                                                                                        │
+	╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+	✦ 版本號已成功更新。
+
+	  現在，我們需要將所有變更提交。
+
+	  請您在終端機中執行以下指令，將所有變更加入暫存區：
+
+	   1 git add .
+
+	  ---
+
+	  在您執行完 git add . 之後，我為您草擬了以下的 commit message：
+
+	   1 refactor: Switch to "None" template with Express server
+	   2
+	   3 This commit refactors the application to remove the Webpack template and its associated dependencies. The goal is to
+		 simplify the architecture into a lightweight Electron background process that serves the front-end via a self-contained
+		 Express web server.
+	   4
+	   5 - Removed all Webpack-related configurations and loader packages.
+	   6 - Reconfigured forge.config.js to remove the webpack plugin.
+	   7 - Re-implemented the main process (main.js) to launch an Express server that hosts static front-end files.
+	   8 - Updated package.json to reflect the new, simpler dependency tree and bumped the version to 1.1.0.
+
+	  這個 commit message 解釋了我們做了什麼（重構為 "None" 模板 + Express）以及為什麼這麼做（簡化架構，成為輕量級背景服務）。
+
+	  請您在執行完 `git add .` 之後，使用您喜歡的方式（例如 `git commit -m "..."` 或 Git GUI 工具）將上述 commit message 提交。
+
+	> done commition and pushed
+
+	✦ 太棒了！您已經完成了提交 (commit) 和推送到遠端儲存庫 (push)。這是一個非常重要的步驟，
+	  確保了我們的變更都被妥善記錄。
+
+	  現在，您的程式碼庫已經準備好進行發布了。
+
+	  請您在終端機中執行 `npm run publish`。
+
+	  請再次確認 GITHUB_TOKEN 環境變數在您目前的終端機會話中是設定好的，以便 Electron Forge 能夠將發布版本上傳到 GitHub
+	  Releases。
+
+	   1 npm run publish
+
+	  這個指令會將您剛剛 make 出來的安裝包上傳到 GitHub Releases。完成後，請您將輸出結果告知我。	
+
+[ ] 02:37 2025-12-26
+
+	> ❯ Packaging for x64 on win32
+	  ❯ Copying files
+	  ❯ Preparing native dependencies
+	  ❯ Finalizing package
+	  ✖ Copying files [FAILED: EBUSY: resource busy or locked, rmdir
+	  'C:\Users\8304018\Documents\GitHub\Electron\my-app\out\my-app-win32-x64']
+	  ✖ Preparing native dependencies [FAILED: EBUSY: resource busy or locked, rmdir
+	  'C:\Users\8304018\Documents\GitHub\Electron\my-app\out\my-app-win32-x64']
+	  ✖ Finalizing package [FAILED: EBUSY: resource busy or locked, rmdir
+	  'C:\Users\8304018\Documents\GitHub\Electron\my-app\out\my-app-win32-x64']
+	  ✖ Packaging for x64 on win32 [FAILED: EBUSY: resource busy or locked, rmdir
+	  'C:\Users\8304018\Documents\GitHub\Electron\my-app\out\my-app-win32-x64']
+	  ✖ Packaging application [FAILED: EBUSY: resource busy or locked, rmdir
+	  'C:\Users\8304018\Documents\GitHub\Electron\my-app\out\my-app-win32-x64']
+	  ✖ Running package command [FAILED: EBUSY: resource busy or locked, rmdir
+	  'C:\Users\8304018\Documents\GitHub\Electron\my-app\out\my-app-win32-x64']
+	  ✖ Running make command [FAILED: EBUSY: resource busy or locked, rmdir
+	  'C:\Users\8304018\Documents\GitHub\Electron\my-app\out\my-app-win32-x64']
+
+	  An unhandled rejection has occurred inside Forge:
+	  Error: EBUSY: resource busy or locked, rmdir 'C:\Users\8304018\Documents\GitHub\Electron\my-app\out\my-app-win32-x64'
+
+	✦ 我看到 npm run make 失敗了，而且錯誤訊息非常明確：
+
+	  EBUSY: resource busy or locked, rmdir 'C:\...\my-app\out\my-app-win32-x64'
+
+	  這是一個在 Windows 開發時非常常見的問題。
+
+	  問題原因：
+
+	  npm run make 指令在打包之前，會先嘗試刪除舊的輸出目錄 (out 目錄)，以便進行全新的打包。
+
+	  這個 EBUSY (Error, Busy) 錯誤表示有另一個程式正在使用 out 目錄或其中的檔案，導致 npm 無法取得刪除該目錄所需的鎖定 (lock)。
+
+	  最可能的原因是：您之前執行的 `npm start` 指令還在背景運行中。
+
+	  當您執行 npm start 時，Electron
+	  應用程式會啟動並持續在背景運行。這個正在運行的應用程式會鎖定它自己的執行檔和相關資源，而這些檔案就位於 out\my-app-win32-x64
+	  目錄中。
+
+	  解決方案：
+
+	  您需要先完全終止正在背景運行的 Electron 應用程式，然後再重新執行 npm run make。
+
+	  請您按照以下步驟操作：
+
+	   1. 打開工作管理員 (Task Manager)：
+		   * 在 Windows 中，您可以按 Ctrl + Shift + Esc 來快速打開工作管理員。
+	   2. 找到並結束 Electron 行程：
+		   * 切換到「詳細資料」(Details) 分頁。
+		   * 在列表中找到名為 electron.exe (或可能是 my-app.exe) 的行程。您可能會看到好幾個，請將它們全部結束。
+		   * 右鍵點擊該行程，然後選擇「結束工作」(End task)。
+	   3. (可選) 刪除 `out` 目錄：
+		   * 為了確保一個乾淨的開始，您可以手動刪除整個 out 目錄。
+	   4. 重新執行 `npm run make`：
+		   * 在確認所有相關行程都已結束後，再次在您的終端機中執行 npm run make。
+
+	  請您試試這個方法。這應該能解決 EBUSY 的問題。
+
+	[X] 02:37 2025-12-26 我不想重新 make 只是把 Windows task 裡面 my-app 3 個都殺掉
+		就重新跑 Publish 結果又是一大堆紅字。 
+	[ ] 02:39 2025-12-26 
+
+		又是 npm run publish 的時候，網路傳輸time out的問題:
+		
+			✖ [publisher-github] Running the publish command [FAILED: Headers Timeout Error]
+			✖ Publishing distributables [FAILED: Headers Timeout Error]
+
+			An unhandled rejection has occurred inside Forge:
+			HttpError: Headers Timeout Error
+			at C:\Users\8304018\Documents\GitHub\Electron\my-app\node_modules\@octokit\request\dist-node\index.js:157:11
+				at async requestWithGraphqlErrorHandling (C:\Users\8304018\Documents\GitHub\Electron\my-app\node_modules\@octokit\plugin-retry\dist-node\index.js:71:20)
+				at async Job.doExecute (C:\Users\8304018\Documents\GitHub\Electron\my-app\node_modules\bottleneck\light.js:405:18)
+			PS C:\Users\8304018\Documents\GitHub\Electron\my-app> npm run publish		
+	
+		我們前面已經有經驗了，所以把這個檔案 forge.config.js 裡面的通報時間調高： ──> 好了。 
+
+        octokitOptions: {
+          request: {
+            timeout: 420000  // 單位毫秒，建議先設 60 秒，可再提高到 120000（2 分鐘）
+          }
+        }
+	
+	PS C:\Users\8304018\Documents\GitHub\Electron\my-app> npm run publish
+
+	> my-app@1.1.0 publish
+	> electron-forge publish
+
+	❯ Checking your system
+	  electron-forge:check-system checking system, create ~/.skip-forge-system-check to stop doing this +0ms
+	❯ Checking package manager version
+	  electron-forge:package-manager Resolved package manager to npm. (Derived from NODE_INSTALLER: undefined, npm_config_user_agent: npm/11.5.2 node/v22.14.0 win32 x64 workspaces/false, lockfile: npm) +0ms
+	✔ Found npm@11.5.2
+	✔ Checking your system
+	❯ Loading configuration
+	  electron-forge:project-resolver searching for project in: C:\Users\8304018\Documents\GitHub\Electron\my-app +0ms
+	  electron-forge:project-resolver package.json with forge dependency found in C:\Users\8304018\Documents\GitHub\Electron\my-app\package.json +4ms
+	  electron-forge:import-search searching [
+	  '@electron-forge/plugin-auto-unpack-natives',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\@electron-forge\\plugin-auto-unpack-natives',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\node_modules\\@electron-forge\\plugin-auto-unpack-natives'
+	] relative to C:\Users\8304018\Documents\GitHub\Electron\my-app +0ms
+	  electron-forge:import-search testing @electron-forge/plugin-auto-unpack-natives +0ms
+	✔ Loading configuration
+	❯ Resolving publish targets
+	  electron-forge:import-search searching [
+	  '@electron-forge/publisher-github',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\@electron-forge\\publisher-github',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\node_modules\\@electron-forge\\publisher-github'
+	] relative to C:\Users\8304018\Documents\GitHub\Electron\my-app +9ms
+	  electron-forge:import-search testing @electron-forge/publisher-github +0ms
+	› Publishing to the following targets: github
+	✔ Resolving publish targets
+	❯ Running make command
+	  electron-forge:publish triggering make +0ms
+	❯ Loading configuration
+	  electron-forge:project-resolver searching for project in: C:\Users\8304018\Documents\GitHub\Electron\my-app +381ms
+	  electron-forge:project-resolver package.json with forge dependency found in C:\Users\8304018\Documents\GitHub\Electron\my-app\package.json +5ms
+	  electron-forge:import-search searching [
+	  '@electron-forge/plugin-auto-unpack-natives',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\@electron-forge\\plugin-auto-unpack-natives',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\node_modules\\@electron-forge\\plugin-auto-unpack-natives'
+	] relative to C:\Users\8304018\Documents\GitHub\Electron\my-app +164ms
+	  electron-forge:import-search testing @electron-forge/plugin-auto-unpack-natives +0ms
+	✔ Loading configuration
+	❯ Resolving make targets
+	  electron-forge:import-search searching [
+	  '@electron-forge/maker-squirrel',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\@electron-forge\\maker-squirrel',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\node_modules\\@electron-forge\\maker-squirrel'
+	] relative to C:\Users\8304018\Documents\GitHub\Electron\my-app +1ms
+	  electron-forge:import-search testing @electron-forge/maker-squirrel +1ms
+	  electron-forge:import-search searching [
+	  '@electron-forge/maker-zip',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\@electron-forge\\maker-zip',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\node_modules\\@electron-forge\\maker-zip'
+	] relative to C:\Users\8304018\Documents\GitHub\Electron\my-app +235ms
+	  electron-forge:import-search testing @electron-forge/maker-zip +0ms
+	  electron-forge:import-search searching [
+	  '@electron-forge/maker-deb',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\@electron-forge\\maker-deb',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\node_modules\\@electron-forge\\maker-deb'
+	] relative to C:\Users\8304018\Documents\GitHub\Electron\my-app +13ms
+	  electron-forge:import-search testing @electron-forge/maker-deb +0ms
+	  electron-forge:import-search searching [
+	  '@electron-forge/maker-rpm',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\@electron-forge\\maker-rpm',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\node_modules\\@electron-forge\\maker-rpm'
+	] relative to C:\Users\8304018\Documents\GitHub\Electron\my-app +8ms
+	  electron-forge:import-search testing @electron-forge/maker-rpm +0ms
+	› Making for the following targets:
+	✔ Resolving make targets
+	❯ Running package command
+	❯ Preparing to package application
+	  electron-forge:project-resolver searching for project in: C:\Users\8304018\Documents\GitHub\Electron\my-app +270ms
+	  electron-forge:project-resolver package.json with forge dependency found in C:\Users\8304018\Documents\GitHub\Electron\my-app\package.json +1ms
+	  electron-forge:import-search searching [
+	  '@electron-forge/plugin-auto-unpack-natives',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\@electron-forge\\plugin-auto-unpack-natives',
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\node_modules\\@electron-forge\\plugin-auto-unpack-natives'
+	] relative to C:\Users\8304018\Documents\GitHub\Electron\my-app +12ms
+	  electron-forge:import-search testing @electron-forge/plugin-auto-unpack-natives +0ms
+	✔ Preparing to package application
+	❯ Running packaging hooks
+	❯ Running generateAssets hook
+	✔ Running generateAssets hook
+	❯ Running prePackage hook
+	✔ Running prePackage hook
+	✔ Running packaging hooks
+	❯ Packaging application
+	› Determining targets...
+	  electron-forge:packager packaging with options {
+	  asar: {
+		unpack: '{{**/{.**,**}/**/*.node,**/{.**,**}/**/*.node},**/{.**,**}/**/*.node}'
+	  },
+	  overwrite: true,
+	  ignore: [ /^\/out\//g ],
+	  quiet: true,
+	  dir: 'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app',
+	  arch: 'x64',
+	  platform: 'win32',
+	  afterFinalizePackageTargets: [ [Function (anonymous)] ],
+	  afterComplete: [ [Function (anonymous)] ],
+	  afterCopy: [ [Function (anonymous)] ],
+	  afterExtract: [ [Function (anonymous)] ],
+	  afterPrune: [ [Function (anonymous)] ],
+	  out: 'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\out',
+	  electronVersion: '39.2.7'
+	} +0ms
+	  electron-forge:packager targets: [ { platform: 'win32', arch: 'x64' } ] +8ms
+	❯ Packaging for x64 on win32
+	❯ Copying files
+	❯ Preparing native dependencies
+	❯ Finalizing package
+	✔ Copying files
+	✔ Preparing native dependencies
+	✔ Finalizing package
+	✔ Packaging for x64 on win32
+	✔ Packaging application
+	❯ Running postPackage hook
+	  electron-forge:packager outputPaths: [
+	  'C:\\Users\\8304018\\Documents\\GitHub\\Electron\\my-app\\out\\my-app-win32-x64'
+	] +26s
+	✔ Running postPackage hook
+	✔ Running package command
+	❯ Running preMake hook
+	✔ Running preMake hook
+	❯ Making distributables
+	❯ Making a squirrel distributable for win32/x64
+	✔ Making a squirrel distributable for win32/x64
+	✔ Making distributables
+	❯ Running postMake hook
+	› Artifacts available at: C:\Users\8304018\Documents\GitHub\Electron\my-app\out\make
+	✔ Running postMake hook
+	✔ Running make command
+	❯ Publishing distributables
+	❯ [publisher-github] Running the publish command
+	› Searching for target release: v1.1.0
+	  electron-forge:publisher:github:debug request {
+	  method: 'GET',
+	  baseUrl: 'https://api.github.com',
+	  headers: {
+		accept: 'application/vnd.github.v3+json',
+		'user-agent': 'Electron Forge octokit-rest.js/20.1.2 octokit-core.js/5.2.2 Node.js/22'
+	  },
+	  mediaType: { format: '', previews: [] },
+	  request: { timeout: 420000, hook: [Function: bound bound register] },
+	  url: '/repos/{owner}/{repo}/releases',
+	  owner: 'hcchengithub',
+	  repo: 'my-app',
+	  per_page: 100
+	} +0ms
+	  electron-forge:publisher:github:info GET /repos/hcchengithub/my-app/releases?per_page=100 - 200 in 544ms +0ms
+	› Uploading distributable (0/1 to v1.1.0)
+	› Uploading distributable (1/1 to v1.1.0)
+	› Uploading distributable (2/1 to v1.1.0)
+	  electron-forge:publisher:github:debug request {
+	  method: 'POST',
+	  baseUrl: 'https://uploads.github.com',
+	  headers: {
+		accept: 'application/vnd.github.v3+json',
+		'user-agent': 'Electron Forge octokit-rest.js/20.1.2 octokit-core.js/5.2.2 Node.js/22',
+		'content-type': 'application/x-msdos-program',
+		'content-length': 134374400
+	  },
+	  mediaType: { format: '', previews: [] },
+	  request: { timeout: 420000, hook: [Function: bound bound register] },
+	  url: 'https://uploads.github.com/repos/hcchengithub/my-app/releases/272814775/assets{?name,label}',
+	  owner: 'hcchengithub',
+	  repo: 'my-app',
+	  release_id: 272814775,
+	  data: <Buffer 4d 5a 90 00 03 00 00 00 04 00 00 00 ff ff 00 00 b8 00 00 00 00 00 00 00 40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ... 134374350 more bytes>,
+	  name: 'my-app-1.1.0 Setup.exe'
+	} +700ms
+	  electron-forge:publisher:github:info POST /repos/hcchengithub/my-app/releases/272814775/assets?name=my-app-1.1.0%20Setup.exe& - 201 in 175268ms +3m
+	› Uploading distributable (3/1 to v1.1.0)
+	✔ [publisher-github] Running the publish command
+	✔ Publishing distributables
+	PS C:\Users\8304018\Documents\GitHub\Electron\my-app>	
+		
 成功	
 [X]
 [ ]
